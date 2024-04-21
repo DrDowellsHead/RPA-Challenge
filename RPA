@@ -1,0 +1,31 @@
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+
+# Reading data from the Excel file
+df = pd.read_excel('challenge.xlsx')
+
+# Initializing the web driver
+driver = webdriver.Chrome()
+
+# Opening the web-page
+driver.get('http://www.rpachallenge.com/')
+time.sleep(5)  # Add a delay for the page to fully load
+
+# Pressing the "Start" button
+start_button = driver.find_element(By.XPATH, '//button[text()="Start"]')
+start_button.click()
+
+# Filling out a form with data from Excel
+for index, row in df.iterrows():
+    print(index, row)
+    driver.find_element(By.XPATH, '//input[@ng-reflect-name="labelFirstName"]').send_keys(row['First Name'])
+    driver.find_element(By.XPATH, '//input[@ng-reflect-name="labelLastName"]').send_keys(row['Last Name '])
+    driver.find_element(By.XPATH, '//input[@ng-reflect-name="labelCompanyName"]').send_keys(row['Company Name'])
+    driver.find_element(By.XPATH, '//input[@ng-reflect-name="labelRole"]').send_keys(row['Role in Company'])
+    driver.find_element(By.XPATH, '//input[@ng-reflect-name="labelAddress"]').send_keys(row['Address'])
+    driver.find_element(By.XPATH, '//input[@ng-reflect-name="labelEmail"]').send_keys(row['Email'])
+    driver.find_element(By.XPATH, '//input[@ng-reflect-name="labelPhone"]').send_keys(str(row['Phone Number']))
+    driver.find_element(By.XPATH, '//input[@value="Submit"]').click()
+    time.sleep(2)  # Adding a delay before filling out the next form
